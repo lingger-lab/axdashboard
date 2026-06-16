@@ -44,13 +44,30 @@ export default async function DashboardLayout({
               >
                 리드 진단
               </Link>
-              {/* 미래 탭 자리 */}
-              <span className="rounded-md px-3 py-1.5 text-sm text-text-subtle cursor-default opacity-40">
+              <Link
+                href="/asset-hub"
+                className="rounded-md px-3 py-1.5 text-sm font-medium text-text hover:bg-surface-warm transition-colors"
+              >
                 자산허브
-              </span>
-              <span className="rounded-md px-3 py-1.5 text-sm text-text-subtle cursor-default opacity-40">
+              </Link>
+              <Link
+                href="/content-pipe"
+                className="rounded-md px-3 py-1.5 text-sm font-medium text-text hover:bg-surface-warm transition-colors"
+              >
                 콘텐츠파이프
-              </span>
+              </Link>
+              <a
+                href={process.env.NEXT_PUBLIC_CAMPONE_URL || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  process.env.NEXT_PUBLIC_CAMPONE_URL
+                    ? "text-text hover:bg-surface-warm"
+                    : "text-text-subtle cursor-not-allowed"
+                }`}
+              >
+                CampOne Studio ↗
+              </a>
             </nav>
           </div>
           <div className="flex items-center gap-3">
