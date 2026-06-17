@@ -44,7 +44,7 @@ export function PipelineBoard({ rows }: { rows: ContentPipelineRow[] }) {
           <p className="text-xs text-text-muted">{curateError}</p>
         )}
       </div>
-      <div className="grid grid-cols-5 gap-3">
+      <div className="snap-scroll-x flex gap-3 pb-4 md:grid md:grid-cols-5 md:overflow-visible md:pb-0">
         {STATUS_ORDER.map((status) => (
           <StatusColumn
             key={status}
@@ -74,7 +74,7 @@ function StatusColumn({
 
   return (
     <div
-      className={`rounded-xl border border-border border-t-2 ${colors[status]} bg-surface-warm/30 p-3`}
+      className={`min-w-[80vw] sm:min-w-[60vw] md:min-w-0 snap-center rounded-xl border border-border border-t-2 ${colors[status]} bg-surface-warm/30 p-3`}
     >
       <h3 className="mb-3 text-xs font-semibold text-text-muted">
         {STATUS_LABELS[status]}{" "}
@@ -82,7 +82,7 @@ function StatusColumn({
       </h3>
       <div className="space-y-2">
         {items.length === 0 ? (
-          <p className="py-4 text-center text-[10px] text-text-subtle">
+          <p className="py-4 text-center text-xs text-text-subtle">
             항목 없음
           </p>
         ) : (
@@ -175,11 +175,11 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
         {item.title || item.news_source}
       </p>
       {item.title && (
-        <p className="mb-1 truncate text-[10px] text-text-subtle">
+        <p className="mb-1 truncate text-xs text-text-subtle">
           {item.news_source}
         </p>
       )}
-      <div className="flex items-center gap-2 text-[10px] text-text-subtle">
+      <div className="flex items-center gap-2 text-xs text-text-subtle">
         <span>{dateStr}</span>
         {item.channel && (
           <span className="rounded bg-surface-warm px-1.5 py-0.5">
@@ -190,7 +190,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
 
       {item.brad_comment && !commentOpen && (
         <p
-          className={`mt-1.5 cursor-pointer truncate rounded px-2 py-1 text-[10px] ${
+          className={`mt-1.5 cursor-pointer truncate rounded px-2 py-1 text-xs ${
             isAiSuggestion
               ? "bg-purple-50 text-purple-600"
               : "bg-accent-light text-accent"
@@ -205,10 +205,10 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
       {/* 뉴스레터 미리보기 */}
       {item.newsletter_body && (
         <details className="mt-1.5">
-          <summary className="cursor-pointer text-[10px] font-medium text-purple-600">
+          <summary className="cursor-pointer text-xs font-medium text-purple-600">
             뉴스레터 미리보기
           </summary>
-          <div className="mt-1 max-h-32 overflow-y-auto rounded bg-surface-warm p-2 text-[10px] text-text whitespace-pre-wrap">
+          <div className="mt-1 max-h-32 overflow-y-auto rounded bg-surface-warm p-2 text-xs text-text whitespace-pre-wrap">
             {item.newsletter_body.slice(0, 500)}
             {item.newsletter_body.length > 500 && "..."}
           </div>
@@ -218,10 +218,10 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
       {/* 숏폼 스크립트 미리보기 */}
       {item.shortform_script && (
         <details className="mt-1">
-          <summary className="cursor-pointer text-[10px] font-medium text-amber-600">
+          <summary className="cursor-pointer text-xs font-medium text-amber-600">
             숏폼 스크립트 미리보기
           </summary>
-          <div className="mt-1 max-h-32 overflow-y-auto rounded bg-surface-warm p-2 text-[10px] text-text whitespace-pre-wrap">
+          <div className="mt-1 max-h-32 overflow-y-auto rounded bg-surface-warm p-2 text-xs text-text whitespace-pre-wrap">
             {item.shortform_script.slice(0, 500)}
             {item.shortform_script.length > 500 && "..."}
           </div>
@@ -229,16 +229,16 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
       )}
 
       {generateError && (
-        <p className="mt-1 text-[10px] text-error">{generateError}</p>
+        <p className="mt-1 text-xs text-error">{generateError}</p>
       )}
 
-      <div className="mt-2 flex flex-wrap gap-1">
+      <div className="mt-2 flex flex-wrap gap-1.5">
         {/* 상태 진행 버튼 */}
         {nextStatus && item.status !== "selected" && (
           <button
             onClick={handleAdvance}
             disabled={isPending}
-            className="rounded bg-accent px-2 py-1 text-[10px] font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+            className="rounded bg-accent px-3 py-2 text-xs font-medium text-white hover:bg-accent/90 active:bg-accent/80 disabled:opacity-50"
           >
             → {STATUS_LABELS[nextStatus]}
           </button>
@@ -249,7 +249,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
           <button
             onClick={handleBuildNewsletter}
             disabled={isGenerating || isPending}
-            className="rounded bg-purple-600 px-2 py-1 text-[10px] font-medium text-white hover:bg-purple-700 disabled:opacity-50"
+            className="rounded bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700 active:bg-purple-800 disabled:opacity-50"
           >
             {isGenerating ? "생성 중..." : "생성"}
           </button>
@@ -260,7 +260,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
           <button
             onClick={handleAdvance}
             disabled={isPending}
-            className="rounded bg-accent px-2 py-1 text-[10px] font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+            className="rounded bg-accent px-3 py-2 text-xs font-medium text-white hover:bg-accent/90 active:bg-accent/80 disabled:opacity-50"
           >
             → {STATUS_LABELS[nextStatus]}
           </button>
@@ -271,7 +271,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
           <button
             onClick={handleBuildShortform}
             disabled={isGenerating || isPending}
-            className="rounded bg-amber-600 px-2 py-1 text-[10px] font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+            className="rounded bg-amber-600 px-3 py-2 text-xs font-medium text-white hover:bg-amber-700 active:bg-amber-800 disabled:opacity-50"
           >
             {isGenerating ? "숏폼 생성 중..." : "숏폼 생성"}
           </button>
@@ -280,24 +280,24 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
         {/* 메모 버튼 */}
         <button
           onClick={() => setCommentOpen(!commentOpen)}
-          className="rounded bg-surface-warm px-2 py-1 text-[10px] text-text-muted hover:text-text"
+          className="rounded bg-surface-warm px-3 py-2 text-xs text-text-muted hover:text-text active:text-text"
         >
           메모
         </button>
       </div>
 
       {commentOpen && (
-        <div className="mt-2 flex gap-1">
+        <div className="mt-2 flex gap-1.5">
           <input
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Brad 코멘트..."
-            className="flex-1 rounded border border-border bg-surface px-2 py-1 text-[10px] outline-none focus:border-accent"
+            className="flex-1 rounded border border-border bg-surface px-3 py-2 text-xs outline-none focus:border-accent"
           />
           <button
             onClick={handleSaveComment}
-            className="rounded bg-accent px-2 py-1 text-[10px] text-white"
+            className="rounded bg-accent px-3 py-2 text-xs text-white active:bg-accent/80"
           >
             저장
           </button>

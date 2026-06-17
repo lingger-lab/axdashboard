@@ -20,7 +20,7 @@ export default async function HomePage({
       .split(",")
       .map((e) => e.trim());
     if (adminEmails.includes(user.email)) {
-      redirect("/lead-diagnosis");
+      redirect("/ax-process");
     }
   }
 

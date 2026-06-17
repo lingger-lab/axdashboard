@@ -691,18 +691,18 @@
   },
   {
     "id": "skill_012",
-    "name": "선거전략 보완·확장 (경선 v3.2)",
+    "name": "선거전략 보완·확장 (경선 v3.4)",
     "type": "skill",
     "domain": "선거여론",
-    "purpose": "INSIGHTS/POLICY 보고서 업로드 → Q&A 27개 항목 기반 경선 중심 보완·확장 보고서 DOCX 생성",
+    "purpose": "CampOne AI의 INSIGHTS(여론분석)/POLICY(전략분석) 보고서를 업로드받아, 22개 Q&A 지식베이스 + 포맷규격 5개로 경선 중심 보완·확장 보고서를 생성. 표 요약 11p + 서술 본문 30p + 부록의 이중 포맷(50p 이내). EXT-1~8 확장 섹션(브랜딩/이미지/카피/공약/콘텐츠/토론/조직/편향검증) 포함. 작성 후 자기확증편향 검증(EXT-8) 자동 실행.",
     "input": "INSIGHTS(여론분석)+POLICY(전략분석) 보고서 (PDF/DOCX)",
-    "output": "50p 이내 보완·확장 보고서(DOCX)",
+    "output": "50p 이내 보완·확장 보고서(DOCX) — 표 요약 11p + 서술 30p + 부록",
     "tech": "Claude skill, DOCX, pandoc",
     "workflow_step": "generate",
     "status": "active",
     "repo_url": "",
-    "last_updated": "2026-06-01",
-    "notes": "election-strategy-enhancer-general(v4.0)의 경선 특화 버전"
+    "last_updated": "2026-06-17",
+    "notes": "v3.2→v3.4 업데이트. 경선 특화(50/50 당원+시민 이중전략). EXT-6 토론/합동연설회, EXT-7 당원조직운영, EXT-8 편향검증 추가. 소스: V3-SKILL/election-report-rewriter-v3.4.skill + SKILL.md + qa_knowledge_base.md"
   },
   {
     "id": "skill_013",

@@ -159,7 +159,7 @@ export function DiagnosisForm() {
 
         {!diagnosis && !error && (
           <p className="py-12 text-center text-sm text-text-subtle">
-            왼쪽에서 리드 정보를 입력하고 진단을 생성하세요
+            리드 정보를 입력하고 진단을 생성하세요
           </p>
         )}
 
@@ -181,7 +181,7 @@ export function DiagnosisForm() {
             </div>
 
             {/* 카드 텍스트 */}
-            <div className="max-h-80 overflow-y-auto rounded-lg bg-surface-warm p-4 text-sm leading-relaxed text-text whitespace-pre-wrap">
+            <div className="max-h-60 sm:max-h-80 overflow-y-auto rounded-lg bg-surface-warm p-4 text-sm leading-relaxed text-text whitespace-pre-wrap">
               {diagnosis.diagnosis_card}
             </div>
 
@@ -189,7 +189,7 @@ export function DiagnosisForm() {
             <div className="flex gap-2">
               <button
                 onClick={handleCopy}
-                className="rounded-lg border border-border px-4 py-2 text-xs font-medium text-text transition-colors hover:bg-surface-warm"
+                className="rounded-lg border border-border px-4 py-2.5 text-xs font-medium text-text transition-colors hover:bg-surface-warm active:bg-surface-warm min-h-[44px]"
               >
                 {copied ? "복사됨!" : "복사"}
               </button>
@@ -197,7 +197,7 @@ export function DiagnosisForm() {
                 <button
                   onClick={handleMarkReplied}
                   disabled={isPending}
-                  className="rounded-lg bg-accent px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-accent/90 disabled:opacity-50"
+                  className="rounded-lg bg-accent px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-accent/90 active:bg-accent/80 disabled:opacity-50 min-h-[44px]"
                 >
                   {isPending ? "처리 중..." : "회신 완료"}
                 </button>

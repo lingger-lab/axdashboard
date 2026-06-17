@@ -12,3 +12,8 @@ export async function loadCatalog(): Promise<AssetItem[]> {
   _cache = JSON.parse(raw) as AssetItem[];
   return _cache;
 }
+
+export async function loadAssetById(id: string): Promise<AssetItem | null> {
+  const catalog = await loadCatalog();
+  return catalog.find((item) => item.id === id) ?? null;
+}

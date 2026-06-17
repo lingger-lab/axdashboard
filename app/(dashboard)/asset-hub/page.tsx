@@ -11,7 +11,7 @@ export default async function AssetHubPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       {/* 요약 카드 */}
-      <div className="mb-6 grid grid-cols-4 gap-4">
+      <div className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <SummaryCard label="전체 자산" value={assets.length} />
         <SummaryCard label="레포" value={repoCount} />
         <SummaryCard label="스킬" value={skillCount} />

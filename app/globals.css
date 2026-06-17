@@ -80,3 +80,22 @@ body {
 .input-field:focus {
   border-color: var(--accent);
 }
+
+/* --- 모바일 터치 피드백 --- */
+@media (pointer: coarse) {
+  .btn-touch:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
+}
+
+/* 칸반 수평 스크롤 (스크롤바 숨김) */
+.snap-scroll-x {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.snap-scroll-x::-webkit-scrollbar {
+  display: none;
+}

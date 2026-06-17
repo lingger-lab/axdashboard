@@ -23,7 +23,7 @@ export default async function ContentPipePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       {/* 상태 요약 */}
-      <div className="mb-6 grid grid-cols-5 gap-3">
+      <div className="mb-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {statusCounts.map((sc) => (
           <div
             key={sc.status}

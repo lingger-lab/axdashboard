@@ -31,7 +31,7 @@ export function AddItemForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-end gap-3 rounded-xl border border-border bg-surface p-4"
+      className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-end"
     >
       <label className="flex-1">
         <span className="mb-1 block text-xs font-medium text-text-muted">
@@ -46,7 +46,7 @@ export function AddItemForm() {
           className="input-field"
         />
       </label>
-      <label className="w-48">
+      <label className="w-full sm:w-48">
         <span className="mb-1 block text-xs font-medium text-text-muted">
           제목 (선택)
         </span>
@@ -61,7 +61,7 @@ export function AddItemForm() {
       <button
         type="submit"
         disabled={loading || !newsSource.trim()}
-        className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent/90 disabled:opacity-50"
+        className="w-full sm:w-auto rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent/90 active:bg-accent/80 disabled:opacity-50"
       >
         {loading ? "추가 중..." : "후보 추가"}
       </button>

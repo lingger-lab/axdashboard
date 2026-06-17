@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     .map((e) => e.trim());
 
   if (adminEmails.includes(user.email)) {
-    return NextResponse.redirect(`${origin}/lead-diagnosis`);
+    return NextResponse.redirect(`${origin}/ax-process`);
   }
 
   return NextResponse.redirect(`${origin}/`);

@@ -19,7 +19,7 @@ export default async function LeadDiagnosisPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       {/* 요약 카드 */}
-      <div className="mb-6 grid grid-cols-3 gap-4">
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <SummaryCard label="전체 리드" value={totalCount} />
         <SummaryCard
           label="회신 완료"

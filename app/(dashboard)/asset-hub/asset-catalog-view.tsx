@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import type { AssetItem } from "@/lib/catalog/types";
 import { DOMAINS, TYPES, STATUSES } from "@/lib/catalog/types";
 
@@ -31,33 +32,35 @@ export function AssetCatalogView({ assets }: { assets: AssetItem[] }) {
   return (
     <div>
       {/* 필터 바 */}
-      <div className="mb-4 flex flex-wrap items-center gap-3">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="이름, 용도, 기술 검색..."
-          className="input-field max-w-xs"
+          className="input-field w-full sm:max-w-xs"
         />
-        <FilterSelect
-          label="도메인"
-          value={domainFilter}
-          options={DOMAINS}
-          onChange={setDomainFilter}
-        />
-        <FilterSelect
-          label="타입"
-          value={typeFilter}
-          options={TYPES}
-          onChange={setTypeFilter}
-        />
-        <FilterSelect
-          label="상태"
-          value={statusFilter}
-          options={STATUSES}
-          onChange={setStatusFilter}
-        />
-        <div className="ml-auto flex gap-1">
+        <div className="flex flex-wrap gap-2">
+          <FilterSelect
+            label="도메인"
+            value={domainFilter}
+            options={DOMAINS}
+            onChange={setDomainFilter}
+          />
+          <FilterSelect
+            label="타입"
+            value={typeFilter}
+            options={TYPES}
+            onChange={setTypeFilter}
+          />
+          <FilterSelect
+            label="상태"
+            value={statusFilter}
+            options={STATUSES}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="hidden sm:flex gap-1 sm:ml-auto">
           <button
             onClick={() => setViewMode("card")}
             className={`rounded-md px-2.5 py-1.5 text-xs transition-colors ${
@@ -132,9 +135,10 @@ function CardView({ items }: { items: AssetItem[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
-        <div
+        <Link
           key={item.id}
-          className="rounded-xl border border-border bg-surface p-4 transition-shadow hover:shadow-sm"
+          href={`/asset-hub/${item.id}`}
+          className="block rounded-xl border border-border bg-surface p-4 transition-all hover:border-accent/50 hover:shadow-sm"
         >
           <div className="mb-2 flex items-center gap-2">
             <TypeBadge type={item.type} />
@@ -149,28 +153,23 @@ function CardView({ items }: { items: AssetItem[] }) {
             {item.tech.split(",").map((t) => (
               <span
                 key={t.trim()}
-                className="rounded bg-surface-warm px-1.5 py-0.5 text-[10px] text-text-subtle"
+                className="rounded bg-surface-warm px-1.5 py-0.5 text-xs text-text-subtle"
               >
                 {t.trim()}
               </span>
             ))}
           </div>
           {item.workflow_step !== "none" && (
-            <p className="mt-2 text-[10px] text-text-subtle">
+            <p className="mt-2 text-xs text-text-subtle">
               단계: {item.workflow_step}
             </p>
           )}
           {item.repo_url && (
-            <a
-              href={item.repo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-block text-[10px] text-accent hover:underline"
-            >
+            <span className="mt-2 inline-block text-xs text-accent">
               GitHub
-            </a>
+            </span>
           )}
-        </div>
+        </Link>
       ))}
     </div>
   );
@@ -206,18 +205,12 @@ function TableView({ items }: { items: AssetItem[] }) {
               className="border-b border-border-light transition-colors hover:bg-surface-warm/50"
             >
               <td className="whitespace-nowrap px-3 py-2.5 text-xs font-medium">
-                {item.repo_url ? (
-                  <a
-                    href={item.repo_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    {item.name}
-                  </a>
-                ) : (
-                  item.name
-                )}
+                <Link
+                  href={`/asset-hub/${item.id}`}
+                  className="text-accent hover:underline"
+                >
+                  {item.name}
+                </Link>
               </td>
               <td className="px-3 py-2.5">
                 <TypeBadge type={item.type} />
@@ -254,7 +247,7 @@ function TypeBadge({ type }: { type: string }) {
       ? "bg-blue-50 text-blue-700"
       : "bg-purple-50 text-purple-700";
   return (
-    <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${style}`}>
+    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${style}`}>
       {type}
     </span>
   );
@@ -269,7 +262,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   return (
     <span
-      className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${styles[status] || "bg-gray-100 text-gray-500"}`}
+      className={`rounded-full px-2 py-0.5 text-xs font-medium ${styles[status] || "bg-gray-100 text-gray-500"}`}
     >
       {status}
     </span>
@@ -286,7 +279,7 @@ function DomainBadge({ domain }: { domain: string }) {
   };
   return (
     <span
-      className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${styles[domain] || "bg-gray-100 text-gray-500"}`}
+      className={`rounded-full px-2 py-0.5 text-xs font-medium ${styles[domain] || "bg-gray-100 text-gray-500"}`}
     >
       {domain}
     </span>

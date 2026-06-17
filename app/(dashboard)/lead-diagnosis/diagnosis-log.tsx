@@ -15,26 +15,36 @@ export function DiagnosisLog({ rows }: { rows: LeadDiagnosisRow[] }) {
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-surface">
-      <table className="w-full text-left text-sm">
-        <thead>
-          <tr className="border-b border-border bg-surface-warm text-xs text-text-muted">
-            <th className="px-3 py-2.5 font-medium">날짜</th>
-            <th className="px-3 py-2.5 font-medium">이름</th>
-            <th className="px-3 py-2.5 font-medium">경력</th>
-            <th className="px-3 py-2.5 font-medium">강점</th>
-            <th className="px-3 py-2.5 font-medium">분기</th>
-            <th className="px-3 py-2.5 font-medium">규제</th>
-            <th className="px-3 py-2.5 font-medium">회신</th>
-            <th className="px-3 py-2.5 font-medium">전환</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <LogRow key={row.id} row={row} />
-          ))}
-        </tbody>
-      </table>
+    <div>
+      {/* 모바일 카드뷰 */}
+      <div className="space-y-3 md:hidden">
+        {rows.map((row) => (
+          <MobileLogCard key={row.id} row={row} />
+        ))}
+      </div>
+
+      {/* 데스크톱 테이블뷰 */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-border bg-surface">
+        <table className="w-full text-left text-sm">
+          <thead>
+            <tr className="border-b border-border bg-surface-warm text-xs text-text-muted">
+              <th className="px-3 py-2.5 font-medium">날짜</th>
+              <th className="px-3 py-2.5 font-medium">이름</th>
+              <th className="px-3 py-2.5 font-medium">경력</th>
+              <th className="px-3 py-2.5 font-medium">강점</th>
+              <th className="px-3 py-2.5 font-medium">분기</th>
+              <th className="px-3 py-2.5 font-medium">규제</th>
+              <th className="px-3 py-2.5 font-medium">회신</th>
+              <th className="px-3 py-2.5 font-medium">전환</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <LogRow key={row.id} row={row} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -147,6 +157,88 @@ function LogRow({ row }: { row: LeadDiagnosisRow }) {
         </tr>
       )}
     </>
+  );
+}
+
+function MobileLogCard({ row }: { row: LeadDiagnosisRow }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState(row.reaction_note || "");
+
+  async function handleConvert() {
+    const res = await markConverted(row.id);
+    if (!res.error) startTransition(() => router.refresh());
+  }
+
+  async function handleSaveNote() {
+    const res = await updateReactionNote(row.id, noteText);
+    if (!res.error) {
+      setNoteOpen(false);
+      startTransition(() => router.refresh());
+    }
+  }
+
+  const date = new Date(row.created_at);
+  const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-xs text-text-muted">{dateStr}</span>
+        <div className="flex items-center gap-2">
+          {row.branch && <BranchDot branch={row.branch} />}
+          {row.is_regulated && (
+            <span className="text-xs font-medium text-error">규제</span>
+          )}
+        </div>
+      </div>
+      <p className="mb-1 text-sm font-medium text-text">
+        {row.name || <span className="text-text-subtle">이름 없음</span>}
+      </p>
+      <p className="mb-1 text-xs text-text-muted line-clamp-2">{row.q1_career}</p>
+      <p className="mb-3 text-xs text-text-muted line-clamp-2">{row.q2_strength}</p>
+      <div className="flex items-center gap-3">
+        {row.replied ? (
+          <span className="text-xs text-accent">회신 완료</span>
+        ) : (
+          <span className="text-xs text-text-subtle">미회신</span>
+        )}
+        {row.converted ? (
+          <button
+            onClick={() => setNoteOpen(!noteOpen)}
+            className="text-xs text-success active:opacity-70 min-h-[44px] flex items-center"
+          >
+            전환 완료
+          </button>
+        ) : (
+          <button
+            onClick={handleConvert}
+            disabled={isPending}
+            className="text-xs text-text-subtle active:text-success min-h-[44px] flex items-center disabled:opacity-50"
+          >
+            전환 표시
+          </button>
+        )}
+      </div>
+      {noteOpen && (
+        <div className="mt-3 flex gap-2">
+          <input
+            type="text"
+            value={noteText}
+            onChange={(e) => setNoteText(e.target.value)}
+            placeholder="반응 메모..."
+            className="flex-1 rounded-md border border-border bg-surface px-3 py-2 text-xs outline-none focus:border-accent"
+          />
+          <button
+            onClick={handleSaveNote}
+            className="rounded-md bg-accent px-3 py-2 text-xs text-white active:bg-accent/80"
+          >
+            저장
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
