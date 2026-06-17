@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { signInWithGoogle } from "@/lib/auth/actions";
-import { InAppBrowserEscape } from "./in-app-browser-escape";
+import { GoogleLoginForm } from "./google-login-form";
 
 export default async function HomePage({
   searchParams,
@@ -30,7 +29,6 @@ export default async function HomePage({
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <InAppBrowserEscape />
       <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 shadow-sm">
         <h1 className="mb-1 text-xl font-bold text-text">엔터랩스 AX</h1>
         <p className="mb-6 text-sm text-text-muted">운영 대시보드</p>
@@ -41,14 +39,7 @@ export default async function HomePage({
           </p>
         )}
 
-        <form action={signInWithGoogle}>
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors"
-          >
-            Google로 로그인
-          </button>
-        </form>
+        <GoogleLoginForm />
 
         <p className="mt-4 text-center text-xs text-text-subtle">
           관리자 계정만 접근 가능합니다
