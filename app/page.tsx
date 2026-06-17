@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signInWithGoogle } from "@/lib/auth/actions";
+import { InAppBrowserEscape } from "./in-app-browser-escape";
 
 export default async function HomePage({
   searchParams,
@@ -29,6 +30,7 @@ export default async function HomePage({
 
   return (
     <div className="flex min-h-screen items-center justify-center">
+      <InAppBrowserEscape />
       <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 shadow-sm">
         <h1 className="mb-1 text-xl font-bold text-text">엔터랩스 AX</h1>
         <p className="mb-6 text-sm text-text-muted">운영 대시보드</p>
