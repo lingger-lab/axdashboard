@@ -87,11 +87,11 @@ export function ChatWidget() {
           type="button"
           onClick={() => setIsOpen(true)}
           className="fixed bottom-20 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:bottom-6 sm:h-14 sm:w-14 overflow-hidden"
-          aria-label="집출 매니저 채팅 열기"
+          aria-label="운영매니저 채팅 열기"
         >
           <img
             src="/chat-icon-a.png"
-            alt="집출 매니저"
+            alt="운영매니저"
             className="h-full w-full object-cover"
           />
         </button>
@@ -101,16 +101,28 @@ export function ChatWidget() {
       {isOpen && (
         <div
           role="dialog"
-          aria-label="집출 매니저 채팅"
-          className="fixed bottom-0 right-0 z-50 flex h-[28rem] w-full flex-col rounded-t-2xl border border-border bg-background shadow-lg sm:bottom-6 sm:right-4 sm:w-96 sm:rounded-2xl animate-scale-in"
+          aria-label="운영매니저 채팅"
+          className="fixed bottom-0 right-0 z-50 flex h-[30rem] w-full flex-col rounded-t-2xl border border-border bg-background shadow-lg sm:bottom-6 sm:right-4 sm:w-96 sm:rounded-2xl animate-scale-in"
         >
           {/* 헤더 */}
           <div className="flex items-center justify-between rounded-t-2xl bg-accent px-4 py-3 sm:rounded-t-2xl">
-            <div>
-              <p className="text-sm font-bold text-white">집출 매니저</p>
-              <p className="text-xs text-white/70">
-                AX 전환에 대해 물어보세요
-              </p>
+            <div className="flex items-center gap-3">
+              {/* 매니저 아바타 */}
+              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full overflow-hidden ring-2 ring-white/20">
+                <img
+                  src="/chat-icon-a.png"
+                  alt="운영매니저"
+                  className="h-full w-full object-cover"
+                />
+                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-accent" />
+              </span>
+              <div>
+                <p className="text-sm font-bold text-white">운영매니저</p>
+                <p className="text-xs text-white/70 flex items-center gap-1">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400" />
+                  응답 가능 · AX 전환 상담
+                </p>
+              </div>
             </div>
             <button
               type="button"
@@ -139,7 +151,12 @@ export function ChatWidget() {
           >
             {messages.length === 0 && (
               <div>
-                <p className="mb-3 text-sm text-text-muted">자주 묻는 질문</p>
+                {/* 환영 메시지 */}
+                <div className="mb-4 rounded-2xl bg-accent-light px-4 py-3 text-sm text-text">
+                  <p className="font-medium mb-1">안녕하세요! 운영매니저입니다.</p>
+                  <p className="text-text-muted text-xs">AX 전환, 자산 활용, 비용, 정부지원 등 무엇이든 물어보세요.</p>
+                </div>
+                <p className="mb-3 text-xs font-medium text-text-muted">자주 묻는 질문</p>
                 <div className="flex flex-wrap gap-2">
                   {QUICK_QUESTIONS.map((q) => (
                     <button
@@ -160,8 +177,13 @@ export function ChatWidget() {
                 key={i}
                 className={`mb-3 flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
+                {msg.role === "bot" && (
+                  <span className="mr-2 mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full overflow-hidden">
+                    <img src="/chat-icon-a.png" alt="" className="h-full w-full object-cover" />
+                  </span>
+                )}
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                  className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
                     msg.role === "user"
                       ? "bg-accent text-white"
                       : "bg-surface text-text shadow-sm"
@@ -184,8 +206,15 @@ export function ChatWidget() {
 
             {loading && (
               <div className="mb-3 flex justify-start">
+                <span className="mr-2 mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full overflow-hidden">
+                  <img src="/chat-icon-a.png" alt="" className="h-full w-full object-cover" />
+                </span>
                 <div className="rounded-2xl bg-surface px-4 py-2 text-sm text-text-muted shadow-sm">
-                  답변 작성 중...
+                  <span className="inline-flex gap-1">
+                    <span className="animate-bounce" style={{ animationDelay: "0ms" }}>·</span>
+                    <span className="animate-bounce" style={{ animationDelay: "150ms" }}>·</span>
+                    <span className="animate-bounce" style={{ animationDelay: "300ms" }}>·</span>
+                  </span>
                 </div>
               </div>
             )}
@@ -202,7 +231,7 @@ export function ChatWidget() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="질문을 입력하세요..."
+                placeholder="무엇이든 물어보세요..."
                 aria-label="질문 입력"
                 className="flex-1 rounded-full border border-border bg-surface px-4 py-2 text-sm text-text placeholder:text-text-subtle focus:border-accent focus:ring-1 focus:ring-accent/20 focus:outline-none transition-colors"
                 disabled={loading}

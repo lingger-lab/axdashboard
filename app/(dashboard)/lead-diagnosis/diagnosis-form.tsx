@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useRef } from "react";
 import { markReplied } from "@/lib/lead-diagnosis/actions";
 import type { LeadDiagnosisRow } from "@/lib/types";
-import { useRouter } from "next/navigation";
 
 interface DiagnosisResult {
   diagnosis: LeadDiagnosisRow;
 }
 
 export function DiagnosisForm() {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [q1, setQ1] = useState("");
   const [q2, setQ2] = useState("");
@@ -18,7 +16,8 @@ export function DiagnosisForm() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<DiagnosisResult | null>(null);
   const [copied, setCopied] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,9 +44,10 @@ export function DiagnosisForm() {
       }
 
       setResult(data);
-      startTransition(() => {
-        router.refresh();
-      });
+      // 결과 영역으로 스크롤
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
     } catch {
       setError("네트워크 오류가 발생했습니다");
     } finally {
@@ -64,7 +64,9 @@ export function DiagnosisForm() {
 
   async function handleMarkReplied() {
     if (!result?.diagnosis.id) return;
+    setIsPending(true);
     const res = await markReplied(result.diagnosis.id);
+    setIsPending(false);
     if (res.error) {
       setError(res.error);
       return;
@@ -76,9 +78,6 @@ export function DiagnosisForm() {
           }
         : null
     );
-    startTransition(() => {
-      router.refresh();
-    });
   }
 
   const diagnosis = result?.diagnosis;
@@ -148,7 +147,7 @@ export function DiagnosisForm() {
       </div>
 
       {/* 결과 영역 */}
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div ref={resultRef} className="rounded-xl border border-border bg-surface p-5">
         <h2 className="mb-4 text-sm font-semibold text-text">진단 결과</h2>
 
         {error && (

@@ -23,6 +23,8 @@ export interface ContentPipelineRow {
   shortform_script: string | null;
   image_url: string | null;
   video_url: string | null;
+  raw_content: string | null;
+  source_type: string | null;
   status: PipelineStatus;
   channel: PublishChannel | null;
   scheduled_at: string | null;

@@ -1,34 +1,21 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// import { cookies } from "next/headers";
+// import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/lib/auth/actions";
+// import { createClient } from "@/lib/supabase/server";
+// import { signOut } from "@/lib/auth/actions";
 import { MobileNav } from "./mobile-nav";
 import { ChatWidget } from "./chat-widget";
-import { ClaudeIcon, GeminiIcon, OpenAIIcon } from "@/lib/ai-icons";
+import { QuickLinksPopover } from "./quick-links-popover";
+import { ClaudeIcon, GeminiIcon, OpenAIIcon, NotebookLMIcon, GoogleAIStudioIcon, GrokIcon, GensparkIcon, CapCutIcon, HeyGenIcon, BandIcon, KmongIcon, FreemoaIcon, WishketIcon, YouTubeIcon, FacebookIcon, NaverBlogIcon, HomeTaxIcon, Gov24Icon } from "@/lib/ai-icons";
+
+// ⚠️ 인증 비활성화 — 반응 테스트 기간 동안 로그인 없이 공개
+// 복구: 이 파일의 주석을 해제하고 app/page.tsx의 redirect 주석도 해제
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user?.email) {
-    redirect("/");
-  }
-
-  const adminEmails = (process.env.ADMIN_EMAILS || "")
-    .split(",")
-    .map((e) => e.trim());
-  if (!adminEmails.includes(user.email)) {
-    redirect("/");
-  }
-
   return (
     <div className="flex min-h-screen flex-col">
       <header className="relative border-b border-border bg-surface px-4 py-3 sm:px-6">
@@ -42,22 +29,7 @@ export default async function DashboardLayout({
             </Link>
             <MobileNav camponeUrl={process.env.NEXT_PUBLIC_CAMPONE_URL} />
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5">
-              <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" title="Claude" className="p-1.5 rounded-md hover:bg-surface-warm active:bg-surface-warm/70 transition-colors"><ClaudeIcon className="w-4 h-4" /></a>
-              <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" title="Gemini" className="p-1.5 rounded-md hover:bg-surface-warm active:bg-surface-warm/70 transition-colors"><GeminiIcon className="w-4 h-4" /></a>
-              <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" title="ChatGPT" className="p-1.5 rounded-md hover:bg-surface-warm active:bg-surface-warm/70 transition-colors"><OpenAIIcon className="w-4 h-4" /></a>
-            </div>
-            <span className="hidden sm:inline text-xs text-text-muted">{user.email}</span>
-            <form action={signOut}>
-              <button
-                type="submit"
-                className="text-xs text-text-subtle hover:text-text active:text-text transition-colors min-h-[44px] px-2"
-              >
-                로그아웃
-              </button>
-            </form>
-          </div>
+          <QuickLinksPopover />
         </div>
       </header>
       <main className="flex-1">{children}</main>
@@ -69,16 +41,29 @@ export default async function DashboardLayout({
             </svg>
             <span>엔터랩스 운영</span>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-text-subtle hover:text-text active:text-text transition-colors">
-              <ClaudeIcon className="w-3.5 h-3.5" /> <span>Claude</span>
-            </a>
-            <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-text-subtle hover:text-text active:text-text transition-colors">
-              <GeminiIcon className="w-3.5 h-3.5" /> <span>Gemini</span>
-            </a>
-            <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-text-subtle hover:text-text active:text-text transition-colors">
-              <OpenAIIcon className="w-3.5 h-3.5" /> <span>ChatGPT</span>
-            </a>
+          <div className="flex items-center gap-1 flex-wrap">
+            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" title="Claude" className="p-1 rounded hover:bg-surface-warm transition-colors"><ClaudeIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" title="Gemini" className="p-1 rounded hover:bg-surface-warm transition-colors"><GeminiIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" title="ChatGPT" className="p-1 rounded hover:bg-surface-warm transition-colors"><OpenAIIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://notebooklm.google.com" target="_blank" rel="noopener noreferrer" title="NotebookLM" className="p-1 rounded hover:bg-surface-warm transition-colors"><NotebookLMIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" title="AI Studio" className="p-1 rounded hover:bg-surface-warm transition-colors"><GoogleAIStudioIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://grok.com" target="_blank" rel="noopener noreferrer" title="Grok" className="p-1 rounded hover:bg-surface-warm transition-colors"><GrokIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.genspark.ai" target="_blank" rel="noopener noreferrer" title="Genspark" className="p-1 rounded hover:bg-surface-warm transition-colors"><GensparkIcon className="w-3.5 h-3.5" /></a>
+            <span className="w-px h-3 bg-border mx-1" />
+            <a href="https://www.capcut.com" target="_blank" rel="noopener noreferrer" title="CapCut" className="p-1 rounded hover:bg-surface-warm transition-colors"><CapCutIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.heygen.com" target="_blank" rel="noopener noreferrer" title="HeyGen" className="p-1 rounded hover:bg-surface-warm transition-colors"><HeyGenIcon className="w-3.5 h-3.5" /></a>
+            <span className="w-px h-3 bg-border mx-1" />
+            <a href="https://www.band.us/band/96322028/post" target="_blank" rel="noopener noreferrer" title="지사네" className="p-1 rounded hover:bg-surface-warm transition-colors"><BandIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" className="p-1 rounded hover:bg-surface-warm transition-colors"><YouTubeIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook" className="p-1 rounded hover:bg-surface-warm transition-colors"><FacebookIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://blog.naver.com/zipchul" target="_blank" rel="noopener noreferrer" title="네이버블로그" className="p-1 rounded hover:bg-surface-warm transition-colors"><NaverBlogIcon className="w-3.5 h-3.5" /></a>
+            <span className="w-px h-3 bg-border mx-1" />
+            <a href="https://kmong.com/@EnterLabs" target="_blank" rel="noopener noreferrer" title="크몽" className="p-1 rounded hover:bg-surface-warm transition-colors"><KmongIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.freemoa.net/m5/s50" target="_blank" rel="noopener noreferrer" title="프리모아" className="p-1 rounded hover:bg-surface-warm transition-colors"><FreemoaIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.wishket.com/mywishket/partners/" target="_blank" rel="noopener noreferrer" title="위시캣" className="p-1 rounded hover:bg-surface-warm transition-colors"><WishketIcon className="w-3.5 h-3.5" /></a>
+            <span className="w-px h-3 bg-border mx-1" />
+            <a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" title="홈택스" className="p-1 rounded hover:bg-surface-warm transition-colors"><HomeTaxIcon className="w-3.5 h-3.5" /></a>
+            <a href="https://www.gov.kr" target="_blank" rel="noopener noreferrer" title="정부24" className="p-1 rounded hover:bg-surface-warm transition-colors"><Gov24Icon className="w-3.5 h-3.5" /></a>
           </div>
         </div>
       </footer>

@@ -165,8 +165,8 @@ function CardView({ items }: { items: AssetItem[] }) {
             </p>
           )}
           {item.repo_url && (
-            <span className="mt-2 inline-block text-xs text-accent">
-              GitHub
+            <span className="mt-2 inline-block text-xs text-text-subtle">
+              GitHub (비공개)
             </span>
           )}
         </Link>

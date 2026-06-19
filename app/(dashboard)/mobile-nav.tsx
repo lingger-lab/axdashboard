@@ -3,14 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClaudeIcon, GeminiIcon, OpenAIIcon } from "@/lib/ai-icons";
-
-const AI_LINKS = [
-  { name: "Claude", href: "https://claude.ai", Icon: ClaudeIcon },
-  { name: "Gemini", href: "https://gemini.google.com", Icon: GeminiIcon },
-  { name: "ChatGPT", href: "https://chatgpt.com", Icon: OpenAIIcon },
-];
-
 export function MobileNav({ camponeUrl }: { camponeUrl: string | undefined }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -102,25 +94,6 @@ export function MobileNav({ camponeUrl }: { camponeUrl: string | undefined }) {
                 CampOne Studio ↗
               </span>
             )}
-          </div>
-          {/* AI 바로가기 */}
-          <div className="mt-2 border-t border-border pt-2 flex gap-2">
-            {AI_LINKS.map((link) => {
-              const Icon = link.Icon;
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 rounded-md px-2.5 py-2 text-xs text-text-subtle hover:text-text active:text-text transition-colors"
-                  onClick={close}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{link.name}</span>
-                </a>
-              );
-            })}
           </div>
         </nav>
       )}

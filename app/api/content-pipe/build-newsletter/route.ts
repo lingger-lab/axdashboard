@@ -1,26 +1,28 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+// import { cookies } from "next/headers";
+// import { createClient } from "@/lib/supabase/server";
 import { adminClient } from "@/lib/supabase/admin";
 import { callClaude } from "@/lib/content-pipe/claude";
 import { parseNewsletterResponse } from "@/lib/content-pipe/parse-newsletter";
 
 export const maxDuration = 60;
 
+// ⚠️ 인증 비활성화 — 반응 테스트 기간 동안 로그인 없이 공개
+// 복구: 아래 인증 코드 주석 해제
 export async function POST(request: Request) {
-  // 쿠키 기반 admin 인증
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim());
-  if (!adminEmails.includes(user.email)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  // // 쿠키 기반 admin 인증
+  // const cookieStore = await cookies();
+  // const supabase = createClient(cookieStore);
+  // const { data: { user } } = await supabase.auth.getUser();
+  //
+  // if (!user?.email) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
+  //
+  // const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim());
+  // if (!adminEmails.includes(user.email)) {
+  //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  // }
 
   // 요청 본문에서 id 추출
   const { id } = await request.json();
@@ -47,21 +49,23 @@ export async function POST(request: Request) {
     );
   }
 
-  // brad_comment 필수 검증
-  const comment = row.brad_comment?.replace(/^\[AI제안\]\s*/g, "").trim();
-  if (!comment) {
-    return NextResponse.json(
-      { error: "Brad 코멘트가 필요합니다. 코멘트를 먼저 입력해주세요." },
-      { status: 400 }
-    );
+  // brad_comment는 선택사항 (없어도 생성 가능)
+  const comment = row.brad_comment?.replace(/^\[AI제안\]\s*/g, "").trim() || "";
+
+  // Claude API 호출 — 원문 + 코멘트 유무에 따라 프롬프트 구성
+  let userMessage = `뉴스: ${row.news_source}\n제목: ${row.title || "없음"}\n`;
+
+  if (row.raw_content) {
+    userMessage += `\n원문:\n${row.raw_content}\n`;
   }
 
-  // Claude API 호출
-  const userMessage = `뉴스: ${row.news_source}
-제목: ${row.title || "없음"}
-Brad 코멘트: ${comment}
+  if (comment) {
+    userMessage += `\nBrad 코멘트: ${comment}\n`;
+  } else {
+    userMessage += `\n(Brad 코멘트 없음 — 뉴스 자체의 시사점과 소상공인·중소기업 관점에서 분석해주세요)\n`;
+  }
 
-응답 형식 지시: 아래 마커를 사용해 구분해주세요.
+  userMessage += `\n응답 형식 지시: 아래 마커를 사용해 구분해주세요.
 [BLOG_BODY]
 블로그 본문 전체
 [/BLOG_BODY]

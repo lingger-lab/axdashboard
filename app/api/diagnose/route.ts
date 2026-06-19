@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import { join } from "path";
-import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+// import { cookies } from "next/headers";
+// import { createClient } from "@/lib/supabase/server";
 import { adminClient } from "@/lib/supabase/admin";
 import { parseDiagnosisResponse } from "@/lib/diagnosis/parse";
 
@@ -13,24 +13,26 @@ const SKILL_PATH = join(
   "SKILL.md"
 );
 
+// ⚠️ 인증 비활성화 — 반응 테스트 기간 동안 로그인 없이 공개
+// 복구: 아래 인증 코드 주석 해제
 export async function POST(request: Request) {
-  // 쿠키 기반 인증: admin 이메일 검증
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const adminEmails = (process.env.ADMIN_EMAILS || "")
-    .split(",")
-    .map((e) => e.trim());
-  if (!adminEmails.includes(user.email)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  // // 쿠키 기반 인증: admin 이메일 검증
+  // const cookieStore = await cookies();
+  // const supabase = createClient(cookieStore);
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
+  //
+  // if (!user?.email) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
+  //
+  // const adminEmails = (process.env.ADMIN_EMAILS || "")
+  //   .split(",")
+  //   .map((e) => e.trim());
+  // if (!adminEmails.includes(user.email)) {
+  //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  // }
 
   const { name, q1_career, q2_strength } = await request.json();
 
