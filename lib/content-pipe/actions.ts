@@ -4,7 +4,7 @@
 import { revalidatePath } from "next/cache";
 // import { createClient } from "@/lib/supabase/server";
 import { adminClient } from "@/lib/supabase/admin";
-import type { PipelineStatus, PublishChannel } from "./types";
+import type { PipelineStatus } from "./types";
 import { scrapeUrl } from "./scrape";
 
 // ⚠️ 인증 비활성화 — 반응 테스트 기간 동안 로그인 없이 공개
@@ -60,7 +60,6 @@ export async function updatePipelineStatus(
 ): Promise<{ error?: string }> {
   await verifyAdmin();
   const updates: Record<string, unknown> = { status };
-  if (status === "selected") updates.selected = true;
   if (status === "published") updates.published_at = new Date().toISOString();
 
   const { error } = await adminClient()
@@ -86,16 +85,3 @@ export async function updateBradComment(
   return {};
 }
 
-export async function updatePipelineChannel(
-  id: string,
-  channel: PublishChannel
-): Promise<{ error?: string }> {
-  await verifyAdmin();
-  const { error } = await adminClient()
-    .from("content_pipeline")
-    .update({ channel })
-    .eq("id", id);
-  if (error) return { error: error.message };
-  revalidatePath("/content-pipe");
-  return {};
-}

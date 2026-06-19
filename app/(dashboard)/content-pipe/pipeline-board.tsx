@@ -192,11 +192,6 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
         )}
         <div className="flex items-center gap-2 text-xs text-text-subtle">
           <span>{dateStr}</span>
-          {item.channel && (
-            <span className="rounded bg-surface-warm px-1.5 py-0.5">
-              {item.channel}
-            </span>
-          )}
         </div>
 
         {item.brad_comment && !commentOpen && (
@@ -239,7 +234,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
             상세
           </button>
 
-          {/* 상태 진행 버튼 */}
+          {/* 상태 진행 버튼 (selected 제외 — selected는 뉴스레터 생성으로만 진행) */}
           {nextStatus && item.status !== "selected" && (
             <button
               onClick={handleAdvance}
@@ -250,7 +245,7 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
             </button>
           )}
 
-          {/* selected 상태: 뉴스레터 생성 버튼 (코멘트 없어도 가능) */}
+          {/* selected 상태: 뉴스레터 생성 버튼 (필수 — 스킵 불가) */}
           {item.status === "selected" && (
             <button
               onClick={handleBuildNewsletter}
@@ -262,17 +257,6 @@ function PipelineCard({ item }: { item: ContentPipelineRow }) {
                 : item.brad_comment && !isAiSuggestion
                   ? "생성"
                   : "AI 분석 생성"}
-            </button>
-          )}
-
-          {/* selected 상태: 일반 진행 버튼 (코멘트 없이 넘어가기) */}
-          {item.status === "selected" && nextStatus && (
-            <button
-              onClick={handleAdvance}
-              disabled={isPending}
-              className="rounded bg-accent px-3 py-2 text-xs font-medium text-white hover:bg-accent/90 active:bg-accent/80 disabled:opacity-50"
-            >
-              → {STATUS_LABELS[nextStatus]}
             </button>
           )}
 
@@ -375,11 +359,6 @@ function DetailModal({
               >
                 {STATUS_LABELS[item.status]}
               </span>
-              {item.channel && (
-                <span className="rounded bg-surface-warm px-1.5 py-0.5 text-[10px] text-text-muted">
-                  {item.channel}
-                </span>
-              )}
               <span className="text-[10px] text-text-subtle">{dateStr}</span>
             </div>
             <h2 className="text-sm font-bold text-text">

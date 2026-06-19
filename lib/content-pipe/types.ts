@@ -5,29 +5,17 @@ export type PipelineStatus =
   | "approved"
   | "published";
 
-export type PublishChannel =
-  | "blog"
-  | "newsletter"
-  | "youtube"
-  | "kakao"
-  | "facebook";
-
 export interface ContentPipelineRow {
   id: string;
   created_at: string;
   news_source: string;
   title: string | null;
-  selected: boolean;
   brad_comment: string | null;
   newsletter_body: string | null;
   shortform_script: string | null;
-  image_url: string | null;
-  video_url: string | null;
   raw_content: string | null;
   source_type: string | null;
   status: PipelineStatus;
-  channel: PublishChannel | null;
-  scheduled_at: string | null;
   published_at: string | null;
   updated_at: string;
 }
